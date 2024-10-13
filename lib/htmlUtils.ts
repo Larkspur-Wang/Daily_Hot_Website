@@ -7,7 +7,8 @@ export function getLatestFile(files: string[]): string | null {
   return files.reduce((latest, current) => {
     const latestDate = parseDate(latest);
     const currentDate = parseDate(current);
-    if (!latestDate || !currentDate) return latest;
+    if (!latestDate) return current;
+    if (!currentDate) return latest;
     return currentDate > latestDate ? current : latest;
-  }, files[0] || null);
+  }, '');
 }
