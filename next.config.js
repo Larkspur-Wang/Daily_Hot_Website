@@ -21,7 +21,7 @@ const nextConfig = {
     ];
   },
   serverRuntimeConfig: {
-    PROJECT_ROOT: path.join(__dirname, '.next/standalone')
+    PROJECT_ROOT: process.cwd()
   },
   publicRuntimeConfig: {
     staticFolder: '/website',

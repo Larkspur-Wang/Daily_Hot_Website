@@ -6,6 +6,7 @@ import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('API handler called');
   const { path: filePath } = req.query;
   const websiteDir = path.join(serverRuntimeConfig.PROJECT_ROOT, 'website');
   
@@ -30,7 +31,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // 列出 websiteDir 中的文件
-  console.log('Files in website directory:', fs.readdirSync(websiteDir));
+  try {
+    console.log('Files in website directory:', fs.readdirSync(websiteDir));
+  } catch (error) {
+    console.error('Error reading website directory:', error);
+  }
 
   try {
     if (!fs.existsSync(fullPath)) {
@@ -46,7 +51,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error: unknown) {
     console.error('Error reading file:', error);
     if (error instanceof Error) {
-      res.status(500).json({ error: 'Internal server error', details: error.message });
+      res.status(500).json({ error: 'Internal server error', details: error.message, stack: error.stack });
     } else {
       res.status(500).json({ error: 'Internal server error', details: 'Unknown error occurred' });
     }
