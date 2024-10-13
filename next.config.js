@@ -3,6 +3,7 @@ const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  distDir: '.next',
   reactStrictMode: true,
   webpack: (config) => {
     config.resolve.fallback = { fs: false, path: false };
@@ -21,7 +22,7 @@ const nextConfig = {
     ];
   },
   serverRuntimeConfig: {
-    PROJECT_ROOT: __dirname
+    PROJECT_ROOT: path.join(__dirname, '.next/standalone')
   },
   publicRuntimeConfig: {
     staticFolder: '/website',

@@ -18,7 +18,23 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const fileContent = fs.readFileSync(fullPath);
-    const contentType = path.extname(fullPath) === '.jpg' ? 'image/jpeg' : 'application/octet-stream';
+    const ext = path.extname(fullPath).toLowerCase();
+    let contentType = 'application/octet-stream';
+    
+    switch (ext) {
+      case '.jpg':
+      case '.jpeg':
+        contentType = 'image/jpeg';
+        break;
+      case '.png':
+        contentType = 'image/png';
+        break;
+      case '.gif':
+        contentType = 'image/gif';
+        break;
+      // 可以根据需要添加更多的文件类型
+    }
+
     res.setHeader('Content-Type', contentType);
     res.status(200).send(fileContent);
   } catch (error) {

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && cp -r website .next/standalone/website",
+    "build": "next build && cp -r website .next/standalone/ && cp -r img .next/standalone/",
     "start": "next start"
   },
   "dependencies": {

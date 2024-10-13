@@ -13,6 +13,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const possiblePaths = [
     path.join(serverRuntimeConfig.PROJECT_ROOT, 'website'),
     path.join(process.cwd(), 'website'),
+    path.join(process.cwd(), '.next', 'standalone', 'website'),
     '/src/website',
     '/app/website',
     './website',
