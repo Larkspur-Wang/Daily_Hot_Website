@@ -47,7 +47,7 @@ export default function Home() {
       };
       iframeRef.current.onerror = (error) => {
         console.error('iframe load error:', error);
-        setError('Failed to load content');
+        setError(`Failed to load content: ${src}`);
         setIsLoading(false);
       };
     }

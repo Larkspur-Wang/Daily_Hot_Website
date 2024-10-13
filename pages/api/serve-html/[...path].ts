@@ -11,6 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   
   console.log('Requested file path:', filePath);
   console.log('Website directory:', websiteDir);
+  console.log('SERVER_RUNTIME_CONFIG:', serverRuntimeConfig);
 
   if (!filePath || typeof filePath === 'string') {
     console.log('Invalid file path');
@@ -20,6 +21,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const fullPath = path.join(websiteDir, ...filePath);
   console.log('Full file path:', fullPath);
+
+  // 检查 websiteDir 是否存在
+  if (!fs.existsSync(websiteDir)) {
+    console.log('Website directory does not exist');
+    res.status(500).json({ error: 'Website directory not found' });
+    return;
+  }
+
+  // 列出 websiteDir 中的文件
+  console.log('Files in website directory:', fs.readdirSync(websiteDir));
 
   try {
     if (!fs.existsSync(fullPath)) {
