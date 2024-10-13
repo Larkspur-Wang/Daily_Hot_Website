@@ -32,8 +32,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('File content length:', fileContent.length);
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(fileContent);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error reading file:', error);
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    if (error instanceof Error) {
+      res.status(500).json({ error: 'Internal server error', details: error.message });
+    } else {
+      res.status(500).json({ error: 'Internal server error', details: 'Unknown error occurred' });
+    }
   }
 }
