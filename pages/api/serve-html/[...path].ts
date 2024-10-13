@@ -11,12 +11,14 @@ const DEBUG = process.env.DEBUG === 'true';
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('API handler called');
   const { path: filePath } = req.query;
-  const websiteDir = path.join(serverRuntimeConfig.PROJECT_ROOT, 'website');
+  const websiteDir = path.join(process.cwd(), '.next', 'standalone', 'website');
   
-  console.log('Requested file path:', filePath);
-  console.log('Website directory:', websiteDir);
-  console.log('SERVER_RUNTIME_CONFIG:', serverRuntimeConfig);
-  console.log('Current working directory:', process.cwd());
+  if (DEBUG) {
+    console.log('Requested file path:', filePath);
+    console.log('Website directory:', websiteDir);
+    console.log('SERVER_RUNTIME_CONFIG:', serverRuntimeConfig);
+    console.log('Current working directory:', process.cwd());
+  }
 
   if (!filePath || typeof filePath === 'string') {
     console.log('Invalid file path');
