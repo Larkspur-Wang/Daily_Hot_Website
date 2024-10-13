@@ -37,29 +37,29 @@ export default function Home() {
   }, []);
 
   const loadHtmlContent = (filename: string) => {
-    if (iframeRef.current) {
-      const src = `/api/serve-html/${filename}`;
-      console.log('Loading HTML content from:', src);
-      fetch(src)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then(content => {
-          const blob = new Blob([content], { type: 'text/html' });
-          const url = URL.createObjectURL(blob);
+    const src = `/api/serve-html/${filename}`;
+    console.log('Loading HTML content from:', src);
+    fetch(src)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(content => {
+        const blob = new Blob([content], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        if (iframeRef.current) {
           iframeRef.current.src = url;
-          console.log('HTML content loaded');
-          setIsLoading(false);
-        })
-        .catch(error => {
-          console.error('Error loading HTML content:', error);
-          setError(`Failed to load content: ${src}`);
-          setIsLoading(false);
-        });
-    }
+        }
+        console.log('HTML content loaded');
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Error loading HTML content:', error);
+        setError(`Failed to load content: ${src}`);
+        setIsLoading(false);
+      });
   };
 
   if (error) {
