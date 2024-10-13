@@ -36,6 +36,20 @@ export default function Home() {
       });
   }, []);
 
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'loadDate') {
+        loadHtmlContent(`producthunt_daily_${event.data.date}.html`);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
   const loadHtmlContent = (filename: string) => {
     const src = `/api/serve-html/${filename}`;
     console.log('Loading HTML content from:', src);

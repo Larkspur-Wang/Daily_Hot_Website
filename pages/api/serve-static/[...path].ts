@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
-import getConfig from 'next/config';
-
-const { serverRuntimeConfig } = getConfig();
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { path: filePath } = req.query;
@@ -14,7 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  const fullPath = path.join(rootDir, '.next', 'standalone', ...filePath);
+  const fullPath = path.join(rootDir, ...filePath);
 
   console.log('Attempting to serve file:', fullPath);
 
@@ -40,7 +37,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       case '.gif':
         contentType = 'image/gif';
         break;
-      // 可以根据需要添加更多的文件类型
     }
 
     res.setHeader('Content-Type', contentType);
