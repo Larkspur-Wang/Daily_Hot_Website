@@ -11,7 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  const fullPath = path.join(rootDir, ...filePath);
+  const fullPath = path.join(rootDir, '.next', 'standalone', ...filePath);
 
   console.log('Attempting to serve file:', fullPath);
 
