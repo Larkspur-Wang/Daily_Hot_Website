@@ -34,12 +34,12 @@ export default function Home() {
         setError(error.message);
         setIsLoading(false);
       });
-  }, []);
 
-  useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === 'loadDate') {
-        loadHtmlContent(`producthunt_daily_${event.data.date}.html`);
+        const filename = `producthunt_daily_${event.data.date}.html`;
+        console.log('Loading new date:', filename);
+        loadHtmlContent(filename);
       }
     };
 
