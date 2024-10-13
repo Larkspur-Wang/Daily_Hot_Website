@@ -4,11 +4,14 @@ export function parseDate(filename: string): Date | null {
 }
 
 export function getLatestFile(files: string[]): string | null {
+  if (!files || files.length === 0) {
+    return null;
+  }
   return files.reduce((latest, current) => {
     const latestDate = parseDate(latest);
     const currentDate = parseDate(current);
     if (!latestDate) return current;
     if (!currentDate) return latest;
     return currentDate > latestDate ? current : latest;
-  }, '');
+  });
 }
