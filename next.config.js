@@ -11,12 +11,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/website/:path*',
+        source: '/api/serve-html/:path*',
         destination: '/api/serve-html/:path*',
       },
       {
-        source: '/img/:path*',
-        destination: '/api/serve-static/img/:path*',
+        source: '/api/serve-static/:path*',
+        destination: '/api/serve-static/:path*',
       }
     ];
   },
