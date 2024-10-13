@@ -17,10 +17,12 @@ export default function Home() {
         return res.json();
       })
       .then(data => {
+        console.log('Fetched files:', data.files);
         if (!data.files || data.files.length === 0) {
           throw new Error('No HTML files found');
         }
         const latestFile = getLatestFile(data.files);
+        console.log('Latest file:', latestFile);
         if (latestFile) {
           loadHtmlContent(latestFile);
         } else {
@@ -36,8 +38,18 @@ export default function Home() {
 
   const loadHtmlContent = (filename: string) => {
     if (iframeRef.current) {
-      iframeRef.current.src = `/website/${filename}`;
-      iframeRef.current.onload = () => setIsLoading(false);
+      const src = `/website/${filename}`;
+      console.log('Loading HTML content from:', src);
+      iframeRef.current.src = src;
+      iframeRef.current.onload = () => {
+        console.log('iframe loaded');
+        setIsLoading(false);
+      };
+      iframeRef.current.onerror = (error) => {
+        console.error('iframe load error:', error);
+        setError('Failed to load content');
+        setIsLoading(false);
+      };
     }
   };
 

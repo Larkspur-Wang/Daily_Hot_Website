@@ -3,7 +3,6 @@ const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  distDir: '.next',
   reactStrictMode: true,
   webpack: (config) => {
     config.resolve.fallback = { fs: false, path: false };
