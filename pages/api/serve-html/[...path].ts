@@ -5,6 +5,9 @@ import getConfig from 'next/config';
 
 const { serverRuntimeConfig } = getConfig();
 
+// 在文件顶部添加
+const DEBUG = process.env.DEBUG === 'true';
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('API handler called');
   const { path: filePath } = req.query;
@@ -13,6 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('Requested file path:', filePath);
   console.log('Website directory:', websiteDir);
   console.log('SERVER_RUNTIME_CONFIG:', serverRuntimeConfig);
+  console.log('Current working directory:', process.cwd());
 
   if (!filePath || typeof filePath === 'string') {
     console.log('Invalid file path');
@@ -26,21 +30,24 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // 检查 websiteDir 是否存在
   if (!fs.existsSync(websiteDir)) {
     console.log('Website directory does not exist');
-    res.status(500).json({ error: 'Website directory not found' });
+    res.status(500).json({ error: 'Website directory not found', websiteDir });
     return;
   }
 
   // 列出 websiteDir 中的文件
   try {
-    console.log('Files in website directory:', fs.readdirSync(websiteDir));
+    const files = fs.readdirSync(websiteDir);
+    console.log('Files in website directory:', files);
   } catch (error) {
     console.error('Error reading website directory:', error);
+    res.status(500).json({ error: 'Error reading website directory', details: error instanceof Error ? error.message : String(error) });
+    return;
   }
 
   try {
     if (!fs.existsSync(fullPath)) {
       console.log('File not found:', fullPath);
-      res.status(404).json({ error: 'File not found' });
+      res.status(404).json({ error: 'File not found', fullPath });
       return;
     }
 
