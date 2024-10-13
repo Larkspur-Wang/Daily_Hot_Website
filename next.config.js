@@ -15,8 +15,8 @@ const nextConfig = {
         destination: '/api/serve-html/:path*',
       },
       {
-        source: '/api/serve-static/:path*',
-        destination: '/api/serve-static/:path*',
+        source: '/img/:path*',
+        destination: '/api/serve-static/img/:path*',
       }
     ];
   },
