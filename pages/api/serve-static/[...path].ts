@@ -3,17 +3,29 @@ import fs from 'fs';
 import path from 'path';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('Serve static handler called');
   const { path: filePath } = req.query;
   const rootDir = process.cwd();
   
+  console.log('Query path:', filePath);
+  console.log('Root directory:', rootDir);
+
   if (!filePath || typeof filePath === 'string') {
+    console.log('Invalid file path');
     res.status(400).json({ error: 'Invalid file path' });
     return;
   }
 
   const fullPath = path.join(rootDir, '.next', 'standalone', ...filePath);
+  console.log('Full file path:', fullPath);
 
-  console.log('Attempting to serve file:', fullPath);
+  // 列出目录内容
+  try {
+    const dirPath = path.dirname(fullPath);
+    console.log('Directory contents:', fs.readdirSync(dirPath));
+  } catch (error) {
+    console.error('Error reading directory:', error);
+  }
 
   try {
     if (!fs.existsSync(fullPath)) {
@@ -21,6 +33,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       res.status(404).json({ error: 'File not found' });
       return;
     }
+
+    const stats = fs.statSync(fullPath);
+    console.log('File stats:', stats);
 
     const fileContent = fs.readFileSync(fullPath);
     const ext = path.extname(fullPath).toLowerCase();
@@ -39,10 +54,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         break;
     }
 
+    console.log('Content type:', contentType);
+    console.log('File size:', fileContent.length);
+
     res.setHeader('Content-Type', contentType);
     res.status(200).send(fileContent);
+    console.log('File sent successfully');
   } catch (error) {
     console.error('Error reading file:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error instanceof Error ? error.message : String(error) });
   }
 }
