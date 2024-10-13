@@ -19,23 +19,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const fullPath = path.join(rootDir, '.next', 'standalone', ...filePath);
   console.log('Full file path:', fullPath);
 
-  // 列出目录内容
-  try {
-    const dirPath = path.dirname(fullPath);
-    console.log('Directory contents:', fs.readdirSync(dirPath));
-  } catch (error) {
-    console.error('Error reading directory:', error);
-  }
-
   try {
     if (!fs.existsSync(fullPath)) {
       console.log('File not found:', fullPath);
       res.status(404).json({ error: 'File not found' });
       return;
     }
-
-    const stats = fs.statSync(fullPath);
-    console.log('File stats:', stats);
 
     const fileContent = fs.readFileSync(fullPath);
     const ext = path.extname(fullPath).toLowerCase();
